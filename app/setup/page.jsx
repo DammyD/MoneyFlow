@@ -123,13 +123,13 @@ export default function SetupPage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#EFEFFF", fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ minHeight: "100vh", background: "#EFEFFF", fontFamily: "'Inter', sans-serif", display: "flex", flexDirection: "column" }}>
       {/* Google Font */}
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');`}</style>
 
       {/* Top Bar */}
-      <div style={{ background: "#fff", borderBottom: "1px solid #E5E7EB", padding: "0 24px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
+      <div style={{ background: "#fff", borderBottom: "1px solid #E5E7EB", padding: "0 40px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
           <span style={{ fontSize: 22, fontWeight: 700 }}>
             <span style={{ color: "#1A1A2E" }}>Money</span>
             <span style={{ color: "#6C5CE7" }}>Flow</span>
@@ -154,10 +154,10 @@ export default function SetupPage() {
       </div>
 
       {/* Main Layout */}
-      <div className="setup-layout" style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 16px", display: "flex", gap: 32, alignItems: "flex-start", flexWrap: "wrap" }}>
+      <div className="setup-layout" style={{ flex: 1, padding: "32px 40px", display: "flex", gap: 32, alignItems: "stretch", flexWrap: "wrap" }}>
 
         {/* Sidebar */}
-        <div className="setup-sidebar" style={{ width: 250, flexShrink: 0, display: "flex", flexDirection: "column", gap: 24 }}>
+        <div className="setup-sidebar" style={{ width: 280, flexShrink: 0, display: "flex", flexDirection: "column", gap: 24 }}>
           <div className="setup-steps-card" style={{ background: "#fff", borderRadius: 16, padding: 24, boxShadow: "0 2px 16px rgba(108,92,231,0.07)" }}>
             <div className="steps-inner" style={{ position: "relative", paddingLeft: 0 }}>
               {STEPS.map((step, i) => {
@@ -192,12 +192,12 @@ export default function SetupPage() {
                         {isCompleted ? "✓" : step.number}
                       </motion.div>
                       {i < STEPS.length - 1 && (
-                        <div style={{ width: 2, flex: 1, minHeight: 32, borderLeft: "2px dashed #E5E7EB", margin: "4px 0" }} />
+                        <div style={{ width: 2, flex: 1, minHeight: 52, borderLeft: "2px dashed #E5E7EB", margin: "4px 0" }} />
                       )}
                     </div>
 
                     {/* Right: text */}
-                    <div style={{ paddingTop: 6, paddingBottom: i < STEPS.length - 1 ? 32 : 0 }}>
+                    <div style={{ paddingTop: 6, paddingBottom: i < STEPS.length - 1 ? 52 : 0 }}>
                       <motion.p
                         animate={{ color: isActive ? "#6C5CE7" : isCompleted ? "#6C5CE7" : "#9CA3AF" }}
                         transition={{ duration: 0.3 }}
@@ -220,7 +220,7 @@ export default function SetupPage() {
           </div>
 
           {/* Trust Badge */}
-          <div className="setup-trust-badge" style={{ background: "#F0FDF4", borderRadius: 12, padding: "16px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)", display: "flex", alignItems: "flex-start", gap: 12 }}>
+          <div className="setup-trust-badge" style={{ background: "#F0FDF4", borderRadius: 12, padding: "16px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)", display: "flex", alignItems: "flex-start", gap: 12, marginTop: "auto" }}>
             <div style={{ fontSize: 24, flexShrink: 0 }}>🛡️</div>
             <div>
               <p style={{ margin: 0, fontWeight: 700, fontSize: 13, color: "#166534" }}>Your data is safe</p>
@@ -232,7 +232,7 @@ export default function SetupPage() {
         </div>
 
         {/* Right Content Card */}
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
           <AnimatePresence mode="wait">
             {currentStep === 1 && (
               <motion.div
@@ -242,7 +242,7 @@ export default function SetupPage() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.35, ease: "easeInOut" }}
-                style={{ background: "#fff", borderRadius: 20, padding: "36px 32px", boxShadow: "0 4px 24px rgba(108,92,231,0.08)" }}
+                style={{ background: "#fff", borderRadius: 20, padding: "36px 32px", boxShadow: "0 4px 24px rgba(108,92,231,0.08)", flex: 1, display: "flex", flexDirection: "column" }}
               >
                 <h1 style={{ margin: "0 0 8px", fontSize: 26, fontWeight: 700, color: "#1A1A2E" }}>
                   Let&apos;s start with your income
@@ -287,7 +287,7 @@ export default function SetupPage() {
                 )}
 
                 {/* Quick-select pills */}
-                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 14, marginBottom: 28 }}>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 14, marginBottom: 48 }}>
                   {QUICK_AMOUNTS.map(item => {
                     const active = selectedQuickAmount === item.label;
                     return (
@@ -405,7 +405,7 @@ export default function SetupPage() {
                 </div>
 
                 {/* Continue Button */}
-                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "auto", paddingTop: 24 }}>
                   <button
                     onClick={handleContinue}
                     style={{
@@ -428,7 +428,7 @@ export default function SetupPage() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.35, ease: "easeInOut" }}
-                style={{ background: "#fff", borderRadius: 20, padding: "36px 32px", boxShadow: "0 4px 24px rgba(108,92,231,0.08)" }}
+                style={{ background: "#fff", borderRadius: 20, padding: "36px 32px", boxShadow: "0 4px 24px rgba(108,92,231,0.08)", flex: 1, display: "flex", flexDirection: "column" }}
               >
                 <h1 style={{ margin: "0 0 8px", fontSize: 26, fontWeight: 700, color: "#1A1A2E" }}>
                   Choose your financial mode
@@ -492,7 +492,7 @@ export default function SetupPage() {
                   <p style={{ color: "#EF4444", fontSize: 13, marginBottom: 12 }}>{modeError}</p>
                 )}
 
-                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "auto", paddingTop: 16 }}>
                   <button
                     onClick={handleGeneratePlan}
                     style={{
