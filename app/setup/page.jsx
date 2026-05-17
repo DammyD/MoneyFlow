@@ -153,6 +153,39 @@ export default function SetupPage() {
         </div>
       </div>
 
+      {/* Mobile Step Bar - hidden on desktop, shown on mobile */}
+      <div className="mobile-step-bar" style={{ display: "none", alignItems: "flex-start", padding: "16px 20px", background: "#fff", borderBottom: "1px solid #E5E7EB" }}>
+        {STEPS.map((step, i) => {
+          const isActive = currentStep === step.number;
+          const isCompleted = currentStep > step.number;
+          return (
+            <div key={step.number} style={{ display: "flex", alignItems: "center", flex: i < STEPS.length - 1 ? 1 : 0 }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+                <div style={{
+                  width: 30, height: 30, borderRadius: "50%",
+                  background: isActive || isCompleted ? "#6C5CE7" : "#fff",
+                  border: "2px solid",
+                  borderColor: isActive || isCompleted ? "#6C5CE7" : "#D1D5DB",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 12, fontWeight: 700,
+                  color: isActive || isCompleted ? "#fff" : "#9CA3AF",
+                }}>
+                  {isCompleted ? "✓" : step.number}
+                </div>
+                <span style={{
+                  fontSize: 11, fontWeight: isActive ? 700 : 500,
+                  color: isActive ? "#6C5CE7" : "#9CA3AF",
+                  whiteSpace: "nowrap",
+                }}>{step.label}</span>
+              </div>
+              {i < STEPS.length - 1 && (
+                <div style={{ flex: 1, height: 0, borderTop: "2px dashed #E5E7EB", margin: "0 8px", marginBottom: 20 }} />
+              )}
+            </div>
+          );
+        })}
+      </div>
+
       {/* Main Layout */}
       <div className="setup-layout" style={{ flex: 1, padding: "32px 40px", display: "flex", gap: 32, alignItems: "stretch", flexWrap: "wrap" }}>
 
@@ -242,6 +275,7 @@ export default function SetupPage() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.35, ease: "easeInOut" }}
+                className="step-content-card"
                 style={{ background: "#fff", borderRadius: 20, padding: "36px 32px", boxShadow: "0 4px 24px rgba(108,92,231,0.08)", flex: 1, display: "flex", flexDirection: "column" }}
               >
                 <h1 style={{ margin: "0 0 8px", fontSize: 26, fontWeight: 700, color: "#1A1A2E" }}>
@@ -428,6 +462,7 @@ export default function SetupPage() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.35, ease: "easeInOut" }}
+                className="step-content-card"
                 style={{ background: "#fff", borderRadius: 20, padding: "36px 32px", boxShadow: "0 4px 24px rgba(108,92,231,0.08)", flex: 1, display: "flex", flexDirection: "column" }}
               >
                 <h1 style={{ margin: "0 0 8px", fontSize: 26, fontWeight: 700, color: "#1A1A2E" }}>
@@ -514,45 +549,44 @@ export default function SetupPage() {
         /* ── Mobile Responsive ── */
         @media (max-width: 768px) {
 
-          /* Stack layout vertically */
+          /* Show mobile step bar, hide desktop sidebar */
+          .mobile-step-bar { display: flex !important; }
+          .setup-sidebar   { display: none  !important; }
+
+          /* Stack layout: full width, less padding */
           .setup-layout {
             flex-direction: column !important;
             padding: 16px !important;
             gap: 16px !important;
+            align-items: stretch !important;
           }
 
-          /* Sidebar becomes full-width horizontal step bar */
-          .setup-sidebar {
-            width: 100% !important;
-            flex-direction: row !important;
-            align-items: flex-start !important;
-            gap: 12px !important;
+          /* Card padding reduced */
+          .step-content-card {
+            padding: 24px 20px !important;
+            border-radius: 16px !important;
           }
 
-          /* Steps card takes remaining width, hides overflow */
-          .setup-steps-card {
-            flex: 1 !important;
-            padding: 16px !important;
+          /* Headings */
+          .step-content-card h1 {
+            font-size: 22px !important;
           }
 
-          /* Steps render horizontally */
-          .steps-inner {
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            justify-content: space-between !important;
-            gap: 0 !important;
-          }
-
-          /* Hide trust badge on mobile to save space */
-          .setup-trust-badge {
-            display: none !important;
+          /* Income input: prevent iOS zoom (must be >= 16px) */
+          .step-content-card input {
+            font-size: 16px !important;
           }
         }
 
         @media (max-width: 480px) {
           .setup-layout {
             padding: 12px !important;
+          }
+          .step-content-card {
+            padding: 20px 16px !important;
+          }
+          .step-content-card h1 {
+            font-size: 20px !important;
           }
         }
       `}</style>
