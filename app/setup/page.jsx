@@ -1,63 +1,14 @@
 "use client";
+// We don't need the you plan on the setup page
+// The user experience is bad, the screen keeps aminating, which makes it difficult for users to continue/interact with the screen
+// We can't have the starting income to be 500k, which means users earning below that amount can't use the site
+// If that 500k is a placholder, then make the color less lighter
+// Don't make the income fixed, let it be fluidy
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-
-const QUICK_AMOUNTS = [
-  { label: "100K", value: 100000 },
-  { label: "250K", value: 250000 },
-  { label: "500K", value: 500000 },
-  { label: "1M+", value: 1000000 },
-];
-
-const MODES = [
-  {
-    id: "survival",
-    icon: "🛡️",
-    name: "Survival Mode",
-    description: "Focused on stability, essentials, and emergency preparedness.",
-    pills: [
-      { label: "Bills", pct: "50%" },
-      { label: "Emergency", pct: "25%" },
-      { label: "Savings", pct: "15%" },
-      { label: "Invest", pct: "5%" },
-      { label: "Flex", pct: "5%" },
-    ],
-  },
-  {
-    id: "growth",
-    icon: "📈",
-    name: "Growth Mode",
-    description: "Focused on balanced wealth building, savings, and long-term growth.",
-    pills: [
-      { label: "Bills", pct: "40%" },
-      { label: "Savings", pct: "20%" },
-      { label: "Invest", pct: "20%" },
-      { label: "Emergency", pct: "10%" },
-      { label: "Flex", pct: "10%" },
-    ],
-  },
-  {
-    id: "softlife",
-    icon: "✨",
-    name: "Soft Life Mode",
-    description: "Focused on enjoying money responsibly and balanced lifestyle spending.",
-    pills: [
-      { label: "Bills", pct: "40%" },
-      { label: "Flex", pct: "25%" },
-      { label: "Savings", pct: "15%" },
-      { label: "Emergency", pct: "10%" },
-      { label: "Invest", pct: "10%" },
-    ],
-  },
-];
-
-const STEPS = [
-  { number: 1, label: "Your Income", subtext: "Tell us how much you earn." },
-  { number: 2, label: "Choose Your Mode", subtext: "Pick a financial style that fits you." },
-  { number: 3, label: "Your Plan", subtext: "See your personalized allocation." },
-];
+import { QUICK_AMOUNTS, MODES, STEPS } from "../../data";
 
 function formatWithCommas(num) {
   if (!num) return "";
@@ -68,12 +19,12 @@ export default function SetupPage() {
   const router = useRouter();
 
   const [currentStep, setCurrentStep] = useState(1);
-  const [income, setIncome] = useState(500000);
+  const [income, setIncome] = useState(0);
   const [sideHustleIncome, setSideHustleIncome] = useState(0);
   const [otherIncome, setOtherIncome] = useState(0);
   const [showSideHustle, setShowSideHustle] = useState(false);
   const [showOtherIncome, setShowOtherIncome] = useState(false);
-  const [selectedQuickAmount, setSelectedQuickAmount] = useState("500K");
+  const [selectedQuickAmount, setSelectedQuickAmount] = useState(null);
   const [selectedMode, setSelectedMode] = useState(null);
   const [incomeError, setIncomeError] = useState("");
   const [modeError, setModeError] = useState("");
@@ -123,9 +74,7 @@ export default function SetupPage() {
   };
 
   return (
-    <div style={{ flex: "1 0 auto", minHeight: "100vh", background: "#EFEFFF", fontFamily: "'Inter', sans-serif", display: "flex", flexDirection: "column" }}>
-      {/* Google Font */}
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');`}</style>
+    <div style={{ flex: "1 0 auto", minHeight: "100vh", background: "#EFEFFF", display: "flex", flexDirection: "column" }}>
 
       {/* Top Bar */}
       <div style={{ background: "#fff", borderBottom: "1px solid #E5E7EB", padding: "0 40px" }}>
@@ -136,6 +85,7 @@ export default function SetupPage() {
           </span>
           <button
             onClick={() => currentStep > 1 ? setCurrentStep(currentStep - 1) : router.back()}
+            className="back-btn"
             style={{
               border: "1.5px solid #E5E7EB",
               background: "transparent",
@@ -145,7 +95,7 @@ export default function SetupPage() {
               fontSize: 14,
               fontWeight: 500,
               color: "#1A1A2E",
-              fontFamily: "inherit",
+              transition: "border-color 0.2s, background 0.2s, color 0.2s",
             }}
           >
             ← Back
@@ -153,7 +103,7 @@ export default function SetupPage() {
         </div>
       </div>
 
-      {/* Mobile Step Bar - hidden on desktop, shown on mobile */}
+      {/* Mobile Step Bar */}
       <div className="mobile-step-bar" style={{ display: "none", alignItems: "flex-start", padding: "16px 20px", background: "#fff", borderBottom: "1px solid #E5E7EB" }}>
         {STEPS.map((step, i) => {
           const isActive = currentStep === step.number;
@@ -196,11 +146,9 @@ export default function SetupPage() {
               {STEPS.map((step, i) => {
                 const isActive = currentStep === step.number;
                 const isCompleted = currentStep > step.number;
-                const isInactive = currentStep < step.number;
 
                 return (
                   <div key={step.number} style={{ display: "flex", gap: 16, marginBottom: i < STEPS.length - 1 ? 0 : 0 }}>
-                    {/* Left: circle + line */}
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                       <motion.div
                         animate={{
@@ -209,15 +157,10 @@ export default function SetupPage() {
                         }}
                         transition={{ duration: 0.3 }}
                         style={{
-                          width: 36,
-                          height: 36,
-                          borderRadius: "50%",
+                          width: 36, height: 36, borderRadius: "50%",
                           border: "2px solid",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: 14,
-                          fontWeight: 700,
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontSize: 14, fontWeight: 700,
                           color: isCompleted || isActive ? "#fff" : "#9CA3AF",
                           flexShrink: 0,
                         }}
@@ -228,11 +171,9 @@ export default function SetupPage() {
                         <div style={{ width: 2, flex: 1, minHeight: 52, borderLeft: "2px dashed #E5E7EB", margin: "4px 0" }} />
                       )}
                     </div>
-
-                    {/* Right: text */}
                     <div style={{ paddingTop: 6, paddingBottom: i < STEPS.length - 1 ? 52 : 0 }}>
                       <motion.p
-                        animate={{ color: isActive ? "#6C5CE7" : isCompleted ? "#6C5CE7" : "#9CA3AF" }}
+                        animate={{ color: isActive || isCompleted ? "#6C5CE7" : "#9CA3AF" }}
                         transition={{ duration: 0.3 }}
                         style={{ margin: 0, fontWeight: 700, fontSize: 14 }}
                       >
@@ -285,42 +226,29 @@ export default function SetupPage() {
                   This helps us create a personalized plan for you.
                 </p>
 
-                {/* Income Field */}
                 <label style={{ display: "block", fontWeight: 600, fontSize: 14, color: "#1A1A2E", marginBottom: 8 }}>
                   Monthly Income (After tax)
                 </label>
                 <div style={{ position: "relative", marginBottom: 8 }}>
-                  <span style={{
-                    position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)",
-                    fontSize: 20, fontWeight: 600, color: "#6B7280",
-                  }}>₦</span>
+                  <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", fontSize: 20, fontWeight: 600, color: "#6B7280" }}>₦</span>
                   <input
                     type="text"
-                    value={formatWithCommas(income)}
+                    value={income > 0 ? formatWithCommas(income) : ""}
                     onChange={handleIncomeChange}
+                    placeholder="e.g. 150,000"
+                    className="income-input"
                     style={{
-                      width: "100%",
-                      height: 60,
-                      paddingLeft: 44,
-                      paddingRight: 16,
-                      fontSize: 20,
-                      fontWeight: 600,
-                      border: "1.5px solid #E5E7EB",
-                      borderRadius: 12,
-                      outline: "none",
-                      color: "#1A1A2E",
-                      fontFamily: "inherit",
-                      boxSizing: "border-box",
+                      width: "100%", height: 60, paddingLeft: 44, paddingRight: 16,
+                      fontSize: 20, fontWeight: 600,
+                      border: "1.5px solid #E5E7EB", borderRadius: 12,
+                      outline: "none", color: "#1A1A2E", boxSizing: "border-box",
                     }}
                     onFocus={e => (e.target.style.borderColor = "#6C5CE7")}
                     onBlur={e => (e.target.style.borderColor = "#E5E7EB")}
                   />
                 </div>
-                {incomeError && (
-                  <p style={{ color: "#EF4444", fontSize: 13, margin: "4px 0 0" }}>{incomeError}</p>
-                )}
+                {incomeError && <p style={{ color: "#EF4444", fontSize: 13, margin: "4px 0 0" }}>{incomeError}</p>}
 
-                {/* Quick-select pills */}
                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 14, marginBottom: 48 }}>
                   {QUICK_AMOUNTS.map(item => {
                     const active = selectedQuickAmount === item.label;
@@ -329,15 +257,11 @@ export default function SetupPage() {
                         key={item.label}
                         onClick={() => handleQuickSelect(item)}
                         style={{
-                          padding: "8px 18px",
-                          borderRadius: 999,
+                          padding: "8px 18px", borderRadius: 999,
                           border: active ? "1.5px solid #6C5CE7" : "1.5px solid #D1D5DB",
                           background: active ? "#F3F0FF" : "#fff",
                           color: active ? "#6C5CE7" : "#6B7280",
-                          fontWeight: 600,
-                          fontSize: 14,
-                          cursor: "pointer",
-                          fontFamily: "inherit",
+                          fontWeight: 600, fontSize: 14, cursor: "pointer",
                           transition: "all 0.2s",
                         }}
                       >
@@ -347,7 +271,6 @@ export default function SetupPage() {
                   })}
                 </div>
 
-                {/* Optional Income */}
                 <p style={{ fontWeight: 600, fontSize: 13, color: "#6B7280", marginBottom: 12 }}>
                   Add other income sources (optional)
                 </p>
@@ -377,14 +300,11 @@ export default function SetupPage() {
                           <input
                             type="text"
                             value={formatWithCommas(sideHustleIncome)}
-                            onChange={e => {
-                              const raw = e.target.value.replace(/,/g, "");
-                              setSideHustleIncome(parseInt(raw, 10) || 0);
-                            }}
+                            onChange={e => setSideHustleIncome(parseInt(e.target.value.replace(/,/g, ""), 10) || 0)}
                             style={{
                               width: "100%", height: 46, paddingLeft: 32, paddingRight: 12,
                               border: "1.5px solid #E5E7EB", borderRadius: 10, fontSize: 15,
-                              fontFamily: "inherit", boxSizing: "border-box", color: "#1A1A2E",
+                              boxSizing: "border-box", color: "#1A1A2E",
                             }}
                             onFocus={e => (e.target.style.borderColor = "#6C5CE7")}
                             onBlur={e => (e.target.style.borderColor = "#E5E7EB")}
@@ -420,14 +340,11 @@ export default function SetupPage() {
                           <input
                             type="text"
                             value={formatWithCommas(otherIncome)}
-                            onChange={e => {
-                              const raw = e.target.value.replace(/,/g, "");
-                              setOtherIncome(parseInt(raw, 10) || 0);
-                            }}
+                            onChange={e => setOtherIncome(parseInt(e.target.value.replace(/,/g, ""), 10) || 0)}
                             style={{
                               width: "100%", height: 46, paddingLeft: 32, paddingRight: 12,
                               border: "1.5px solid #E5E7EB", borderRadius: 10, fontSize: 15,
-                              fontFamily: "inherit", boxSizing: "border-box", color: "#1A1A2E",
+                              boxSizing: "border-box", color: "#1A1A2E",
                             }}
                             onFocus={e => (e.target.style.borderColor = "#6C5CE7")}
                             onBlur={e => (e.target.style.borderColor = "#E5E7EB")}
@@ -438,14 +355,15 @@ export default function SetupPage() {
                   </AnimatePresence>
                 </div>
 
-                {/* Continue Button */}
                 <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "auto", paddingTop: 24 }}>
                   <button
                     onClick={handleContinue}
+                    className="primary-btn"
                     style={{
                       background: "#6C5CE7", color: "#fff", border: "none",
                       borderRadius: 12, padding: "14px 32px", fontSize: 16,
-                      fontWeight: 700, cursor: "pointer", fontFamily: "inherit",
+                      fontWeight: 700, cursor: "pointer",
+                      transition: "background 0.2s, transform 0.15s",
                     }}
                   >
                     Continue →
@@ -483,12 +401,8 @@ export default function SetupPage() {
                         style={{
                           border: selected ? "2px solid #6C5CE7" : "1.5px solid #E5E7EB",
                           background: selected ? "#F3F0FF" : "#fff",
-                          borderRadius: 14,
-                          padding: "18px 20px",
-                          cursor: "pointer",
-                          display: "flex",
-                          gap: 16,
-                          alignItems: "flex-start",
+                          borderRadius: 14, padding: "18px 20px", cursor: "pointer",
+                          display: "flex", gap: 16, alignItems: "flex-start",
                           transition: "border 0.2s, background 0.2s",
                         }}
                       >
@@ -507,10 +421,8 @@ export default function SetupPage() {
                                 style={{
                                   background: selected ? "#EDE9FE" : "#F3F4F6",
                                   color: selected ? "#6C5CE7" : "#374151",
-                                  borderRadius: 999,
-                                  padding: "3px 10px",
-                                  fontSize: 12,
-                                  fontWeight: 600,
+                                  borderRadius: 999, padding: "3px 10px",
+                                  fontSize: 12, fontWeight: 600,
                                 }}
                               >
                                 {pill.label} {pill.pct}
@@ -523,17 +435,17 @@ export default function SetupPage() {
                   })}
                 </div>
 
-                {modeError && (
-                  <p style={{ color: "#EF4444", fontSize: 13, marginBottom: 12 }}>{modeError}</p>
-                )}
+                {modeError && <p style={{ color: "#EF4444", fontSize: 13, marginBottom: 12 }}>{modeError}</p>}
 
                 <div style={{ display: "flex", justifyContent: "flex-end", paddingTop: 16 }}>
                   <button
                     onClick={handleGeneratePlan}
+                    className="primary-btn"
                     style={{
                       background: "#6C5CE7", color: "#fff", border: "none",
                       borderRadius: 12, padding: "14px 32px", fontSize: 16,
-                      fontWeight: 700, cursor: "pointer", fontFamily: "inherit",
+                      fontWeight: 700, cursor: "pointer",
+                      transition: "background 0.2s, transform 0.15s",
                     }}
                   >
                     Generate My Plan →
@@ -546,48 +458,22 @@ export default function SetupPage() {
       </div>
 
       <style>{`
-        /* ── Mobile Responsive ── */
+        .income-input::placeholder { color: #C4C9D4; font-weight: 400; }
+        .primary-btn:hover { background: #5a4bd1 !important; transform: translateY(-1px); }
+        .primary-btn:active { transform: translateY(0); }
+        .back-btn:hover { border-color: #6C5CE7 !important; color: #6C5CE7 !important; background: #F3F0FF !important; }
         @media (max-width: 768px) {
-
-          /* Show mobile step bar, hide desktop sidebar */
           .mobile-step-bar { display: flex !important; }
           .setup-sidebar   { display: none  !important; }
-
-          /* Stack layout: full width, less padding */
-          .setup-layout {
-            flex-direction: column !important;
-            padding: 16px !important;
-            gap: 16px !important;
-            align-items: stretch !important;
-          }
-
-          /* Card padding reduced */
-          .step-content-card {
-            padding: 24px 20px !important;
-            border-radius: 16px !important;
-          }
-
-          /* Headings */
-          .step-content-card h1 {
-            font-size: 22px !important;
-          }
-
-          /* Income input: prevent iOS zoom (must be >= 16px) */
-          .step-content-card input {
-            font-size: 16px !important;
-          }
+          .setup-layout    { flex-direction: column !important; padding: 16px !important; gap: 16px !important; }
+          .step-content-card { padding: 24px 20px !important; border-radius: 16px !important; }
+          .step-content-card h1 { font-size: 22px !important; }
+          .step-content-card input { font-size: 16px !important; }
         }
-
         @media (max-width: 480px) {
-          .setup-layout {
-            padding: 12px !important;
-          }
-          .step-content-card {
-            padding: 20px 16px !important;
-          }
-          .step-content-card h1 {
-            font-size: 20px !important;
-          }
+          .setup-layout { padding: 12px !important; }
+          .step-content-card { padding: 20px 16px !important; }
+          .step-content-card h1 { font-size: 20px !important; }
         }
       `}</style>
     </div>
