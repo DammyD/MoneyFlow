@@ -5,10 +5,10 @@ export default function Sidebar({ activeNav = "Overview" }) {
     <aside className="w-52 shrink-0 bg-white border-r border-gray-100 flex flex-col py-5 min-h-screen">
       {/* Logo */}
       <div className="flex items-center gap-2 px-5 pb-6 text-base font-medium text-gray-900">
-        <div className="w-7 h-7 bg-violet-600 rounded-lg flex items-center justify-center">
-          <i className="ti ti-wallet text-white text-sm" aria-hidden="true" />
-        </div>
-        Money<span className="text-violet-600">Flow</span>
+        <span style={{ fontSize: 22, fontWeight: 700 }}>
+            <span style={{ color: "#1A1A2E" }}>Money</span>
+            <span style={{ color: "#6C5CE7" }}>Flow</span>
+          </span>
       </div>
 
       {/* Nav */}

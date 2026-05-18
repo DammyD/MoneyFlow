@@ -69,7 +69,7 @@ export const ALLOCATIONS = [
     id: "savings",
     name: "Savings",
     description: "Short-term goals & future plans",
-    icon: "ti-piggy-bank",
+    icon: "ti-wallet",
     color: "#1D9E75",
     iconBg: "bg-emerald-100",
     iconColor: "text-emerald-600",
