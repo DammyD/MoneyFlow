@@ -123,7 +123,7 @@ export default function SetupPage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#EFEFFF", fontFamily: "'Inter', sans-serif", display: "flex", flexDirection: "column" }}>
+    <div style={{ flex: "1 0 auto", minHeight: "100vh", background: "#EFEFFF", fontFamily: "'Inter', sans-serif", display: "flex", flexDirection: "column" }}>
       {/* Google Font */}
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');`}</style>
 
@@ -527,7 +527,7 @@ export default function SetupPage() {
                   <p style={{ color: "#EF4444", fontSize: 13, marginBottom: 12 }}>{modeError}</p>
                 )}
 
-                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "auto", paddingTop: 16 }}>
+                <div style={{ display: "flex", justifyContent: "flex-end", paddingTop: 16 }}>
                   <button
                     onClick={handleGeneratePlan}
                     style={{
