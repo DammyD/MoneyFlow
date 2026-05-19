@@ -46,6 +46,7 @@ Focused on lifestyle flexibility while maintaining financial structure.
 
 ### Frontend
 - Next.js
+-TypeScript.tsx
 - Tailwind CSS
 - Framer Motion
 - Recharts
