@@ -19,12 +19,12 @@ export default function SetupPage() {
   const router = useRouter();
 
   const [currentStep, setCurrentStep] = useState(1);
-  const [income, setIncome] = useState(500000);
+  const [income, setIncome] = useState(0);
   const [sideHustleIncome, setSideHustleIncome] = useState(0);
   const [otherIncome, setOtherIncome] = useState(0);
   const [showSideHustle, setShowSideHustle] = useState(false);
   const [showOtherIncome, setShowOtherIncome] = useState(false);
-  const [selectedQuickAmount, setSelectedQuickAmount] = useState("500K");
+  const [selectedQuickAmount, setSelectedQuickAmount] = useState(null);
   const [selectedMode, setSelectedMode] = useState(null);
   const [incomeError, setIncomeError] = useState("");
   const [modeError, setModeError] = useState("");
@@ -85,6 +85,7 @@ export default function SetupPage() {
           </span>
           <button
             onClick={() => currentStep > 1 ? setCurrentStep(currentStep - 1) : router.back()}
+            className="back-btn"
             style={{
               border: "1.5px solid #E5E7EB",
               background: "transparent",
@@ -94,6 +95,7 @@ export default function SetupPage() {
               fontSize: 14,
               fontWeight: 500,
               color: "#1A1A2E",
+              transition: "border-color 0.2s, background 0.2s, color 0.2s",
             }}
           >
             ← Back
@@ -231,8 +233,10 @@ export default function SetupPage() {
                   <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", fontSize: 20, fontWeight: 600, color: "#6B7280" }}>₦</span>
                   <input
                     type="text"
-                    value={formatWithCommas(income)}
+                    value={income > 0 ? formatWithCommas(income) : ""}
                     onChange={handleIncomeChange}
+                    placeholder="e.g. 150,000"
+                    className="income-input"
                     style={{
                       width: "100%", height: 60, paddingLeft: 44, paddingRight: 16,
                       fontSize: 20, fontWeight: 600,
@@ -354,10 +358,12 @@ export default function SetupPage() {
                 <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "auto", paddingTop: 24 }}>
                   <button
                     onClick={handleContinue}
+                    className="primary-btn"
                     style={{
                       background: "#6C5CE7", color: "#fff", border: "none",
                       borderRadius: 12, padding: "14px 32px", fontSize: 16,
                       fontWeight: 700, cursor: "pointer",
+                      transition: "background 0.2s, transform 0.15s",
                     }}
                   >
                     Continue →
@@ -434,10 +440,12 @@ export default function SetupPage() {
                 <div style={{ display: "flex", justifyContent: "flex-end", paddingTop: 16 }}>
                   <button
                     onClick={handleGeneratePlan}
+                    className="primary-btn"
                     style={{
                       background: "#6C5CE7", color: "#fff", border: "none",
                       borderRadius: 12, padding: "14px 32px", fontSize: 16,
                       fontWeight: 700, cursor: "pointer",
+                      transition: "background 0.2s, transform 0.15s",
                     }}
                   >
                     Generate My Plan →
@@ -450,6 +458,10 @@ export default function SetupPage() {
       </div>
 
       <style>{`
+        .income-input::placeholder { color: #C4C9D4; font-weight: 400; }
+        .primary-btn:hover { background: #5a4bd1 !important; transform: translateY(-1px); }
+        .primary-btn:active { transform: translateY(0); }
+        .back-btn:hover { border-color: #6C5CE7 !important; color: #6C5CE7 !important; background: #F3F0FF !important; }
         @media (max-width: 768px) {
           .mobile-step-bar { display: flex !important; }
           .setup-sidebar   { display: none  !important; }
